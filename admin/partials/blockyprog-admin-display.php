@@ -29,9 +29,7 @@
                 <p>Thanks for using my plugin !</p><a href="https://developers.google.com/blockly" target="_blank" style="float: right"><img src="/wp-content/plugins/blockyprog/admin/img/logo_built_on.png"/></a>
                 <p>Blockly is a library from Google for building beginner-friendly block-based programming languages.</p>
                 <p>Blockly is the beginner way to programming languages.</p>
-                <table class="form-table" role="presentation">
-                    
-                </table>
+                <div style="clear: both"></div>
             </div>
             <div id="tab-options">
                 <h2>Options</h2>

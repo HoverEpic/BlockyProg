@@ -187,6 +187,8 @@ final class BlockyProg {
         $this->loader->add_action('init', $plugin_admin, 'post_type_blocky_function');
         $this->loader->add_action("admin_init", $plugin_admin, "add_blocky_function_meta_boxes");
         $this->loader->add_action("save_post", $plugin_admin, "save_blocky_function_meta_boxes");
+        //Remove SEO meta for this post type
+        $this->loader->add_action('add_meta_boxes', $plugin_admin, 'remove_wpseo_meta_box', 100);
     }
 
     /**

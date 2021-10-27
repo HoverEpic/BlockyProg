@@ -142,6 +142,7 @@ class BlockyProg_Admin {
         $supports = array(
             'title', // post title
             'post-formats', // post formats
+            // disable wpseo_meta
         );
         $labels = array(
             'name' => _x('Fonctions Blocky', 'plural'),
@@ -178,6 +179,10 @@ class BlockyProg_Admin {
      */
     public function page_admin() {
         include( plugin_dir_path(__FILE__) . 'partials/blockyprog-admin-display.php' );
+    }
+    
+    public function remove_wpseo_meta_box() {
+        remove_meta_box('wpseo_meta', 'blocky_function', 'normal');
     }
 
     public function add_blocky_function_meta_boxes() {
@@ -221,15 +226,18 @@ class BlockyProg_Admin {
                 <div id="blocklyDiv"></div>
             </div>
             <div id="tab-code">
-                <textarea class="language-php" id="codeTextarea" style="min-height: 900px; width: 100%" disabled></textarea>
+                <!--<textarea id="codeTextarea" style="min-height: 900px; width: 100%" disabled></textarea>-->
+                <!--<div id="codeTextareaEditor" style="position: absolute; min-height: 900px; width: 100%"></div>-->
+                <pre><code id="codeTextarea" style="max-height: 900px"><?php echo htmlspecialchars($blocky_php, ENT_QUOTES); ?></code></pre>
+                <input type="hidden" id="phpBlocky" name="blocky_php_code" value="<?php echo $blocky_php; ?>"/>
             </div>
             <div id="tab-xml">
-                <textarea class="language-xml" id="xmlTextarea" style="min-height: 900px; width: 100%;" value="<?php echo $blocky_xml; ?>"></textarea>
-                <input type="hidden" id="phpBlocky" name="blocky_php_code" value="<?php echo $blocky_php; ?>"/>
+                <!--<textarea id="xmlTextarea" style="min-height: 900px; width: 100%;" value="<?php echo $blocky_xml; ?>"></textarea>-->
+                <pre><code id="xmlTextarea" style="max-height: 900px"><?php echo $blocky_xml; ?></code></pre>
                 <input type="hidden" id="xmlBlocky" name="blocky_xml_code" value="<?php echo $blocky_xml; ?>"/>
             </div>
             <div id="tab-triggers">
-                Type d'action (shortcode not working)
+                Type d'action
                 <select name="blocky_hook_type" id="hook_type">
                     <option value="" <?php echo $blocky_hook_type == '' ? 'selected' : ''; ?>>disabled</option>
                     <option value="action"<?php echo $blocky_hook_type == 'action' ? 'selected' : ''; ?>>action hook</option>
@@ -259,9 +267,10 @@ class BlockyProg_Admin {
             <script>
                 jQuery(document).ready(function ($) {
                     $("#tabs").tabs();
+
                     var blocklyArea = document.getElementById('blocklyArea');
                     var blocklyDiv = document.getElementById('blocklyDiv');
-                    
+
                     //Blockly ressources
                     //https://developers.google.com/blockly
                     //https://blockly-demo.appspot.com/static/demos/blockfactory/index.html
@@ -300,7 +309,6 @@ class BlockyProg_Admin {
                         Blockly.svgResize(workspace);
                         blocklyArea.style.display = 'none';
                     };
-
                     window.addEventListener('resize', onresize, false);
                     onresize();
                     Blockly.svgResize(workspace);
@@ -316,21 +324,22 @@ class BlockyProg_Admin {
                     }
                     load();
 
-                    function onUpdate(event) {
+                    // https://stackoverflow.com/a/4835406
+                    var escapeHtml = function (text) {
+                        var map = {
+                            '&': '&amp;',
+                            '<': '&lt;',
+                            '>': '&gt;',
+                            '"': '&quot;',
+                            "'": '&#039;'
+                        };
 
-                        //PHP
-                        var code = Blockly.PHP.workspaceToCode(workspace);
-                        document.getElementById('codeTextarea').value = code;
-                        document.getElementById('phpBlocky').value = code;
-
-                        //XML
-                        var xml = Blockly.Xml.workspaceToDom(workspace);
-                        var xml_text = Blockly.Xml.domToText(xml);
-                        document.getElementById('xmlTextarea').value = prettifyXml(xml_text);
-                        document.getElementById('xmlBlocky').value = xml_text;
+                        return text.replace(/[&<>"']/g, function (m) {
+                            return map[m];
+                        });
                     }
-                    workspace.addChangeListener(onUpdate);
 
+                    // https://stackoverflow.com/a/47317538
                     var prettifyXml = function (sourceXml)
                     {
                         var xmlDoc = new DOMParser().parseFromString(sourceXml, 'application/xml');
@@ -354,10 +363,24 @@ class BlockyProg_Admin {
                         var resultXml = new XMLSerializer().serializeToString(resultDoc);
                         return resultXml;
                     };
-                    
-                    // TODO replace by https://ace.c9.io/
-                    //hljs.highlightAll();
 
+                    function onUpdate(event) {
+
+                        //PHP
+                        var code = Blockly.PHP.workspaceToCode(workspace);
+                        document.getElementById('codeTextarea').innerHTML = escapeHtml('<\?php\n' + code);
+                        document.getElementById('phpBlocky').value = code;
+
+                        //XML
+                        var xml = Blockly.Xml.workspaceToDom(workspace);
+                        var xml_text = Blockly.Xml.domToText(xml);
+                        document.getElementById('xmlTextarea').innerHTML = escapeHtml(prettifyXml(xml_text));
+                        document.getElementById('xmlBlocky').value = xml_text;
+
+                        hljs.highlightAll();
+                    }
+                    workspace.addChangeListener(onUpdate);
+                    onUpdate();
                 });
             </script>
         </div>
@@ -366,7 +389,7 @@ class BlockyProg_Admin {
 
     public function save_blocky_function_meta_boxes() {
         global $post;
-        if (get_post_type($post->ID) === 'blocky_function') {
+        if ($post != null && get_post_type($post->ID) === 'blocky_function') {
             if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
                 return;
             }

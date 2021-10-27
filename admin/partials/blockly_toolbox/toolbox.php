@@ -34,6 +34,7 @@
     ?>
     <category name="HTML" colour="#9fa55b">
             <block type="html_element_block"></block>
+            <block type="html_element_block_a"></block>
     </category>
     <category name="PHP" colour="#9fa55b">
         <category name="Variables" colour="#9fa55b">

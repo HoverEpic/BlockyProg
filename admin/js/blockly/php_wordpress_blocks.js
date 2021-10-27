@@ -207,7 +207,7 @@ Blockly.Blocks['html_element_block'] = {
     init: function () {
         this.appendStatementInput("element")
                 .setCheck(null)
-                .appendField("HTML")
+                .appendField("HTML element")
                 .appendField(new Blockly.FieldDropdown([["div", "div"], ["span", "span"], ["p", "p"], ["h1", "h1"], ["h2", "h2"], ["h3", "h3"], ["h4", "h4"], ["h5", "h5"], ["h6", "h6"]]), "html_element")
                 .appendField("class")
                 .appendField(new Blockly.FieldTextInput(""), "class")
@@ -216,6 +216,58 @@ Blockly.Blocks['html_element_block'] = {
         this.appendDummyInput()
                 .appendField("style")
                 .appendField(new Blockly.FieldMultilineInput(''), "style");
+        this.setPreviousStatement(true, null);
+        this.setNextStatement(true, null);
+        this.setColour(230);
+        this.setTooltip("");
+        this.setHelpUrl("");
+    }
+};
+//Blockly.Blocks['html_element_block2'] = {
+//    init: function () {
+//        this.appendStatementInput("element")
+//                .setCheck("String")
+//                .appendField("HTML")
+//                .appendField(new Blockly.FieldDropdown([["div", "div"], ["span", "span"], ["p", "p"], ["h1", "h1"], ["h2", "h2"], ["h3", "h3"], ["h4", "h4"], ["h5", "h5"], ["h6", "h6"]]), "html_element")
+//                .appendField("class")
+//                .appendField(new Blockly.FieldTextInput(""), "class")
+//                .appendField("id")
+//                .appendField(new Blockly.FieldTextInput(""), "id")
+//                .appendField("style")
+//                .appendField(new Blockly.FieldMultilineInput(''), 'style');
+//        this.setOutput(true, null);
+//        this.setColour(230);
+//        this.setTooltip("");
+//        this.setHelpUrl("");
+//    }
+//};
+Blockly.Blocks['html_element_block_a'] = {
+    init: function () {
+//        this.appendStatementInput("element")
+//                .setCheck(null)
+//                .appendField("HTML a")
+//                .appendField("class")
+//                .appendField(new Blockly.FieldTextInput(""), "class")
+//                .appendField("id")
+//                .appendField(new Blockly.FieldTextInput(""), "id");
+        
+        this.appendDummyInput()
+                .appendField("HTML a");
+        this.appendValueInput("class")
+                .appendField("class")
+                .setCheck("String")
+                .setAlign(Blockly.ALIGN_RIGHT);
+        
+        this.appendValueInput("id")
+                .appendField("id")
+                .setCheck("String")
+                .setAlign(Blockly.ALIGN_RIGHT);
+        this.appendDummyInput()
+                .appendField("style")
+                .appendField(new Blockly.FieldMultilineInput(''), "style");
+        this.appendValueInput("link")
+                .setCheck("String")
+                .setAlign(Blockly.ALIGN_RIGHT);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(230);

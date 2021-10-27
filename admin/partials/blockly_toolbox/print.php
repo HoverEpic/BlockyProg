@@ -32,5 +32,6 @@
             <block type="text_multiline"></block>
         </value>
     </block>
+    <block type="text_multiline"></block>
     <block type="var_dump"></block>
 </category>

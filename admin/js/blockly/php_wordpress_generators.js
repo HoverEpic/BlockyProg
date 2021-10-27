@@ -33,8 +33,8 @@ Blockly.PHP['variable'] = function (block) {
 Blockly.PHP['globale'] = function (block) {
     var text_variable = block.getFieldValue('globale');
     var value_name = Blockly.PHP.valueToCode(block, 'NAME', Blockly.PHP.ORDER_NONE);
-    var code = '$' + text_variable + value_name;
-    return [code, Blockly.PHP.ORDER_NONE];
+    var code = 'global $' + text_variable + value_name + ';\n';
+    return code;
 };
 
 Blockly.PHP['get_posts'] = function (block) {
@@ -85,6 +85,25 @@ Blockly.PHP['html_element_block'] = function (block) {
     var text_id = block.getFieldValue('id');
     var text_style = block.getFieldValue('style');
     var statements_element = Blockly.PHP.statementToCode(block, 'element');
-    var code = '?>\n<' + dropdown_html_element + ' class=\'' + text_class + '\' id=\'' + text_id + '\' style=\'' + text_style + '\'>\n<?php' + statements_element + '?>\n</' + dropdown_html_element + '>\n<?php\n';
+    var code = '?>\n<' + dropdown_html_element + ' class=\'' + text_class + '\' id=\'' + text_id + '\' style=\'' + text_style + '\'>\n<?php\n' + statements_element + '?>\n</' + dropdown_html_element + '>\n<?php\n';
+    return code;
+};
+//Blockly.PHP['html_element_block2'] = function (block) {
+//    var dropdown_html_element = block.getFieldValue('html_element');
+//    var text_class = block.getFieldValue('class');
+//    var text_id = block.getFieldValue('id');
+//    var text_style = block.getFieldValue('style');
+//    var statements_element = Blockly.PHP.statementToCode(block, 'element');
+//    var code = '\'<' + dropdown_html_element + ' class=\'' + text_class + '\' id=\'' + text_id + '\' style=\'' + text_style + '\'>\n' + statements_element + '\n</' + dropdown_html_element + '>\'';
+//    return [code, Blockly.PHP.ORDER_NONE];
+//};
+
+Blockly.PHP['html_element_block_a'] = function (block) {
+    var text_class = block.getFieldValue('class');
+    var text_id = block.getFieldValue('id');
+    var text_style = block.getFieldValue('style');
+    var value_link = Blockly.PHP.valueToCode(block, 'link', Blockly.PHP.ORDER_ATOMIC);
+    var statements_element = Blockly.PHP.statementToCode(block, 'element');
+    var code = '?>\n<a' + ' href=\'' + value_link + '\' class=\'' + text_class + '\' id=\'' + text_id + '\' style=\'' + text_style + '\'>\n<?php\n' + statements_element + '?>\n</a>\n<?php\n';
     return code;
 };
