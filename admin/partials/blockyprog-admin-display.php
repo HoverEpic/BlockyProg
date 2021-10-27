@@ -26,7 +26,7 @@
             </ul>
             <div id="tab-welcome">
                 <h2>Welcome</h2>
-                <p>Thanks for using my plugin !</p><a href="https://developers.google.com/blockly" target="_blank" style="float: right"><img src="/wp-content/plugins/blockyprog/admin/img/logo_built_on.png"/></a>
+                <p>Thanks for using my plugin !</p><a href="https://developers.google.com/blockly" target="_blank" style="float: right"><img src="<?php echo plugins_url( '../img/logo_built_on.png' , __FILE__ ); ?>"/></a>
                 <p>Blockly is a library from Google for building beginner-friendly block-based programming languages.</p>
                 <p>Blockly is the beginner way to programming languages.</p>
                 <div style="clear: both"></div>
